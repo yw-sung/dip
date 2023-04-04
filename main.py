@@ -1,7 +1,8 @@
 from interpolation import interpolation
 from affineTransformation import affine
-import hist_eq
-import affineTransformation
+from hist_eq import hist_eq
+from hist_spec import hist_spec
+import boxfilter
 
 # Shift+F10을(를) 눌러 실행하거나 내 코드로 바꿉니다.
 # 클래스, 파일, 도구 창, 액션 및 설정을 어디서나 검색하려면 Shift 두 번을(를) 누릅니다.
@@ -10,6 +11,8 @@ import affineTransformation
 def run():
     interpolation()
     affine()
+    hist_eq()
+    hist_spec()
 
 # def test():
     # something()
