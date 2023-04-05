@@ -1,14 +1,16 @@
 import cv2
 import numpy as np
 from random import random
+import matplotlib.pyplot as plt
 
 
 def noise_gaussian(std, gray_img):
     gray_img = gray_img.astype(float)
     h, w = gray_img.shape
     gaussian = np.random.normal(0, std, (h,w))
-    noise = np.zeros((h, w), dtype=np.float64)
-    cv2.imshow('noise', gaussian)
+    # noise = np.zeros((h, w), dtype=np.float64)
+    # cv2.imshow('noise', gaussian)
+    # cv2.waitKey(0)
     noise = gray_img + gaussian
     noise = np.uint8(np.clip(noise, 0, 255))
     print(noise)

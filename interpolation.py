@@ -7,11 +7,8 @@ def interpolation():
     t_shape = t_image.shape[:2]
 
     # Check Size of the image (512x512 3ch)
-    print(t_image.shape)
 
     tt_image = cv2.resize(t_image, dsize=(150, 150))
-    plt.imshow(tt_image)
-    plt.show()
 
     zth_image = cv2.resize(tt_image, dsize=(500, 500), interpolation=cv2.INTER_NEAREST)
     bilinear_image = cv2.resize(tt_image, dsize=(500, 500), interpolation=cv2.INTER_LINEAR)
@@ -20,11 +17,15 @@ def interpolation():
     images = [t_image, zth_image, bilinear_image, bicubic_image]
     titles = ["Original", "Zth-Order", "Bilinear", "Bicubic"]
 
-    plt.figure(figsize=(16, 3))
+    plt.figure(figsize=(10, 3), dpi=300)
+    plt.suptitle('Interpolation 150x150 to 500x500', fontsize=20)
     for i, (image, title) in enumerate(zip(images, titles)):
         plt.subplot(1, 4, i + 1)
         plt.imshow(image)
-        plt.title(title, fontsize=20)
+        plt.xlim(0, 500)
+        plt.ylim(500, 0)
+        plt.title(title, fontsize=16)
+    plt.tight_layout()
     plt.show()
 
 
@@ -33,10 +34,18 @@ def interpolation():
 
 
     left_tops = [(220, 200)] * 4 + [(90, 120)] * 4 + [(30, 200)] * 4
-    plt.figure(figsize=(16, 10))
+    plt.figure(figsize=(10, 6), dpi=300)
+    plt.suptitle('Cropped', fontsize=20)
     for i, (image, left_top, title) in enumerate(zip(images * 4, left_tops, titles * 4)):
         plt.subplot(4, 4, i + 1)
-        print(titles)
         plt.imshow(crop(image, left_top))
-        plt.title(title, fontsize=20)
+        if i == 0: # Original
+            plt.title(title, fontsize=16)
+        if i == 1: # Zth
+            plt.title(title, fontsize=16)
+        if i == 2: # Bilinear
+            plt.title(title, fontsize=16)
+        if i == 3: # Bicubic
+            plt.title(title, fontsize=16)
+    plt.tight_layout()
     plt.show()
