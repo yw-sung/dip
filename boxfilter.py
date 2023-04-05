@@ -1,35 +1,31 @@
 import cv2
 from skimage import data
 import matplotlib.pyplot as plt
-from noise import noise_gaussian
+from noise import noise_gaussian, noise_sap
 
-gas_std = 20;
-t_image = data.astronaut()
-t_image = cv2.cvtColor(t_image, cv2.COLOR_BGR2GRAY)
-t_image_ori = t_image
-t_image = noise_gaussian(gas_std, t_image)
-blur_0 = cv2.blur(t_image,(3,3))
-blur_1 = cv2.blur(t_image,(11,11))
-blur_2 = cv2.blur(t_image,(21,21))
+def boxfilter():
+    gas_std = 30
+    sap_p = 0.2
 
-# b,g,r = cv2.split(blur)
-# blur = cv2.merge([r,g,b])
-# cv2.imshow('blur',blur)
-# cv2.waitKey(0)
+    t_image = data.astronaut()
+    t_image = cv2.cvtColor(t_image, cv2.COLOR_BGR2GRAY)
+    t_image_gas = noise_gaussian(gas_std, t_image)
+    t_image_sap = noise_sap(0.2, t_image)
 
-plt.figure(figsize=(10,3))
-plt.suptitle('Boxfilter')
-plt.subplot(1,4,1)
-plt.imshow(t_image_ori,cmap='gray')
-plt.title('Original')
-plt.subplot(1,4,2)
-plt.imshow(t_image,cmap='gray')
-plt.title(f'Noise = {gas_std}')
-plt.subplot(1,4,3)
-plt.imshow(blur_1,cmap='gray')
-plt.title('3x3 Filter')
-plt.subplot(1,4,4)
-plt.imshow(blur_2,cmap='gray')
-plt.title('21x21 Filter')
-plt.tight_layout
-plt.show()
+    blur_ori = cv2.blur(t_image,(3,3))
+    blur_gas = cv2.blur(t_image_gas,(3,3))
+    blur_sap = cv2.blur(t_image_sap,(3,3))
+
+    plt.figure(figsize=(10,3.5))
+    plt.suptitle('3x3 Boxfilter Processed', fontsize=20)
+    plt.subplot(1,3,1)
+    plt.imshow(blur_ori,cmap='gray')
+    plt.title('Non-processed')
+    plt.subplot(1,3,2)
+    plt.imshow(blur_gas, cmap='gray')
+    plt.title(f'Gaussian std = {gas_std}')
+    plt.subplot(1,3,3)
+    plt.imshow(blur_sap,cmap='gray')
+    plt.title(f'Salt-and-pepper p = {sap_p}')
+    plt.tight_layout()
+    plt.show()
