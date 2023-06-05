@@ -7,17 +7,7 @@ from edgedetection import edgedetection
 from unsharpmask import unsharpmask
 from meanfilters import meanfilter
 from orderfilter import orderfilter
-
-
-def run():
-    interpolation()
-    affine()
-    hist_eq()
-    hist_spec()
-    boxfilter()
-    edgedetection()
-    unsharpmask()
-
+from dct_proj import dct_proj
 
 def sel_run(x):
     if x == 1:
@@ -36,12 +26,25 @@ def sel_run(x):
         meanfilter()
     if x == 8:
         orderfilter()
+    if x == 9:
+        dct_proj()
+
 
 
 if __name__ == '__main__':
-    x = int(input('Enter Example Number(1 ~ 9) : '))
-    while (x < 10):
-        sel_run(x)
-        print('Press Ctrl+C to Exit.')
-        x = int(input('Enter Example Number(1 ~ 9) : '))
+    # x = int(input('1: Interpolation\n'
+    #               '2: Affine Transformation\n'
+    #               '3: Histogram Equalization\n'
+    #               '4: Edge Detection\n'
+    #               '5: Unsharp Masking and Highboost Filter\n'
+    #               '6: Boxfilter\n'
+    #               '7: Meanfilter\n'
+    #               '8: Order-statistic Filter\n'
+    #               '9: The Final Projects\n'
+    #               'Enter Example Number(1 ~ 9) : '))
+    # while (x < 10):
+    #     sel_run(x)
+    #     print('Press Ctrl+C to Exit.')
+    #     x = int(input('Enter Example Number(1 ~ 9) : '))
+    sel_run(9)
     exit()

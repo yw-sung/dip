@@ -32,3 +32,31 @@ def noise_sap(p, img):
                 noise[i][j] = img[i][j]
     noise = np.uint8(np.clip(noise, 0, 255))
     return noise
+
+def noise_salt(p, img):
+    h, w = img.shape
+    th = 1 - p
+    noise = np.zeros((h, w), dtype=np.float64)
+    for i in range(h):
+        for j in range(w):
+            rdn = random()
+            if rdn > th:
+                noise[i][j] = 255
+            else:
+                noise[i][j] = img[i][j]
+    noise = np.uint8(np.clip(noise, 0, 255))
+    return noise
+
+def noise_pepper(p, img):
+    h, w = img.shape
+    th = 1 - p
+    noise = np.zeros((h, w), dtype=np.float64)
+    for i in range(h):
+        for j in range(w):
+            rdn = random()
+            if rdn < p:
+                noise[i][j] = 0
+            else:
+                noise[i][j] = img[i][j]
+    noise = np.uint8(np.clip(noise, 0, 255))
+    return noise

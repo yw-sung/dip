@@ -18,10 +18,15 @@ def meanfilter():
 
     def contraharmonic_mean(img, ksize, Q):
         img = img.astype(float)
-        num = np.power(img, Q+1)
-        den = np.power(img, Q)
+        num = np.float_power(img, Q+1)
+        den = np.float_power(img, Q)
         kernel = np.full(ksize, 1.0)
+        num_pcd = np.clip(cv2.filter2D(num, -1, kernel), 0, 40000000000)
+        den_pcd = np.clip(cv2.filter2D(den, -1, kernel), 0, 40000000000)
+        print(f'num {num_pcd}')
+        print(f'den {den_pcd}')
         out_img = cv2.filter2D(num, -1, kernel) / cv2.filter2D(den, -1, kernel)
+        out_img = num_pcd / den_pcd
         out_img = np.uint8(np.clip(out_img,0,255))
         return out_img
 
@@ -42,7 +47,8 @@ def meanfilter():
 
     # amf_img = cv2.blur(gas_img, (3, 3))
     amf_img = contraharmonic_mean(gas_img, (3,3), 0.0)
-    hmf_img = contraharmonic_mean(gas_img, (3,3), 1.0)
+    hmf_img = contraharmonic_mean(gas_img, (3,3), -1.0)
+    hmf_img_2 = contraharmonic_mean(gas_img, (3, 3), 1.0)
     gmf_img = gmf(gas_img, 3)
 
     # Plot Gaussian noise processed img
@@ -61,15 +67,19 @@ def meanfilter():
     plt.title('Geometric mean', fontsize=16)
     plt.imshow(gmf_img, cmap='gray')
     plt.subplot(2,3,5)
-    plt.title('Harmonic mean', fontsize=16)
+    plt.title('Contraharmonic (Q = -1.0)', fontsize=16)
     plt.imshow(hmf_img, cmap='gray')
+    plt.subplot(2,3,6)
+    plt.title('Contraharmonic (Q = 1.0)', fontsize=16)
+    plt.imshow(hmf_img_2, cmap='gray')
     plt.tight_layout()
     plt.show()
 
 
     # amf_img = cv2.blur(gas_img, (3, 3))
-    amf_img = contraharmonic_mean(sap_img, (3,3), 0.0)
-    hmf_img = contraharmonic_mean(sap_img, (3,3), -1.0)
+    amf_img = contraharmonic_mean(sap_img, (3, 3), 0.0)
+    hmf_img = contraharmonic_mean(sap_img, (3, 3), 1.0)
+    hmf_img_2 = contraharmonic_mean(sap_img, (3, 3), -1.0)
     gmf_img = gmf(sap_img, 3)
 
     # Plot Salt-and-Pepper noise processed img
@@ -88,7 +98,10 @@ def meanfilter():
     plt.title('Geometric mean', fontsize=16)
     plt.imshow(gmf_img, cmap='gray')
     plt.subplot(2,3,5)
-    plt.title('Harmonic mean', fontsize=16)
+    plt.title('Contraharmonic (Q = -1.0)', fontsize=16)
     plt.imshow(hmf_img, cmap='gray')
+    plt.subplot(2,3,6)
+    plt.title('Contraharmonic (Q = 1.0)', fontsize=16)
+    plt.imshow(hmf_img_2, cmap='gray')
     plt.tight_layout()
     plt.show()
